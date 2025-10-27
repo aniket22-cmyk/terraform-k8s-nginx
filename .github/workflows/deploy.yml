@@ -31,12 +31,12 @@ jobs:
 
     - name: Setup SSH
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private.pem
-        chmod 600 private.pem
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > densee.pem
+        chmod 600 densee.pem
 
     - name: Deploy Nginx
       run: |
-        ssh -o StrictHostKeyChecking=no -i private.pem ubuntu@${{ env.INSTANCE_IP }} <<'EOF'
+        ssh -o StrictHostKeyChecking=no -i densee.pem ubuntu@${{ env.INSTANCE_IP }} <<'EOF'
         kubectl apply -f https://raw.githubusercontent.com/${{ github.repository }}/main/manifests/nginx-deployment.yaml
         kubectl get pods -A
         EOF
