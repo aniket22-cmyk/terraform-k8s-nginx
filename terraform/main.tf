@@ -118,7 +118,3 @@ chown ubuntu:ubuntu /home/ubuntu/.minikube-ready
 echo "=== Setup complete at $(date) ==="
 EOF
 }
-
-output "instance_ip" {
-  value = aws_instance.k8s_node.public_ip
-}
