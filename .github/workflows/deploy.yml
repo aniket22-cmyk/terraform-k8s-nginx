@@ -33,7 +33,19 @@ jobs:
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > densee.pem
         chmod 600 densee.pem
-
+    - name: wait for ssh to be ready
+      run: |
+        echo "wait for ec2 ssh..."
+        for i in {1..15}; do 
+          if ssh -o StrictHostKeyChecking=no -i densee.pem -o ConnectTimeout=10 ubuntu@${{ env.INSTANCE_IP }} "echo 'SSH ready'" 2>/dev/null; then
+            echo "ssh ready"
+            exit 0
+          fi
+          echo "ssh not ready yet"
+          sleep 30
+        done
+        echo "ssh failed after reties"
+        exit 1
     - name: Deploy Nginx
       run: |
         ssh -o StrictHostKeyChecking=no -i densee.pem ubuntu@${{ env.INSTANCE_IP }} <<'EOF'
